@@ -20,7 +20,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        const bool useSharedApi = false;
+        const bool useSharedApi = true;
         if (useSharedApi)
         {
             var httpClient = new HttpClient { BaseAddress = new Uri("https://set09102-api.b-davison.workers.dev/") };
