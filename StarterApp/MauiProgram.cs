@@ -26,6 +26,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddTransient<IItemRepository, ItemRepository>();
         builder.Services.AddTransient<IRentalRepository, RentalRepository>();
+        builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
 
         builder.Services.AddSingleton<AppShellViewModel>();
         builder.Services.AddSingleton<AppShell>();
