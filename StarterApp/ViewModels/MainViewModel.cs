@@ -108,6 +108,20 @@ public partial class MainViewModel : BaseViewModel
     }
 
 
+    /// @brief Navigates to the item list page
+    [RelayCommand]
+    private async Task NavigateToItemsAsync()
+    {
+        await _navigationService.NavigateToAsync("ItemListPage");
+    }
+
+    /// @brief Navigates to the rental list page
+    [RelayCommand]
+    private async Task NavigateToRentalsAsync()
+    {
+        await _navigationService.NavigateToAsync("RentalListPage");
+    }
+
     /// @brief Navigates to the user list page
     /// @details Relay command that navigates to the user management page, admin only
     /// @return A task representing the asynchronous navigation operation
