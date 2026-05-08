@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using StarterApp.ViewModels;
-using StarterApp.Database.Data;
 using StarterApp.Views;
 using System.Diagnostics;
 using StarterApp.Services;
@@ -21,18 +20,9 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        const bool useSharedApi = true;
-        if (useSharedApi)
-        {
-            var httpClient = new HttpClient { BaseAddress = new Uri("https://set09102-api.b-davison.workers.dev/") };
-            builder.Services.AddSingleton(httpClient);
-            builder.Services.AddSingleton<IAuthenticationService, ApiAuthenticationService>();
-        }
-        else
-        {
-            builder.Services.AddDbContext<AppDbContext>();
-            builder.Services.AddSingleton<IAuthenticationService, LocalAuthenticationService>();
-        }
+        var httpClient = new HttpClient { BaseAddress = new Uri("https://set09102-api.b-davison.workers.dev/") };
+        builder.Services.AddSingleton(httpClient);
+        builder.Services.AddSingleton<IAuthenticationService, ApiAuthenticationService>();
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddTransient<IItemRepository, ItemRepository>();
         builder.Services.AddTransient<IRentalRepository, RentalRepository>();
