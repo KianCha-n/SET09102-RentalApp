@@ -12,7 +12,7 @@ public partial class RentalListViewModel : BaseViewModel
     private readonly IRentalRepository _rentalRepository;
     private readonly INavigationService _navigationService;
 
-    // Items being rented out by the current user (people renting your stuff)
+    // Items being rented out by the current user 
     [ObservableProperty]
     private ObservableCollection<Rental> incomingRentals = new();
 
