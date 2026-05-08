@@ -16,7 +16,11 @@ public class Rental
     public DateTime CreatedAt { get; set; }
 
     public string FormattedPrice => $"£{TotalPrice:F2}";
-    public string DateRange => $"{StartDate} – {EndDate}";
+
+    private static string FormatDate(string raw) =>
+        DateTime.TryParse(raw, out var d) ? d.ToString("dd MMM yyyy") : raw;
+
+    public string DateRange => $"{FormatDate(StartDate)} – {FormatDate(EndDate)}";
     public string StatusDisplay => Status.ToLowerInvariant() switch
     {
         "pending" => "Pending",
