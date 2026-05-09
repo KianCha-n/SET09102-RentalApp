@@ -7,6 +7,7 @@ public interface IAuthenticationService
     event EventHandler<bool>? AuthenticationStateChanged;
     
     bool IsAuthenticated { get; }
+    bool IsTokenExpired { get; }  // true when the JWT token from the API has passed its expiry time
     User? CurrentUser { get; }
     List<string> CurrentUserRoles { get; }
     

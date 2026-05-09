@@ -9,9 +9,13 @@ public class ApiAuthenticationService : IAuthenticationService
     private readonly HttpClient _httpClient;
     private User? _currentUser;
     private readonly List<string> _currentUserRoles = new();
+    // Stores when the API token expires so we can detect sessions that have timed out
+    private DateTime _tokenExpiresAt = DateTime.MinValue;
 
     public event EventHandler<bool>? AuthenticationStateChanged;
     public bool IsAuthenticated => _currentUser != null;
+    // Token is expired when a user is logged in but the current time has passed the expiry
+    public bool IsTokenExpired => _currentUser != null && DateTime.UtcNow >= _tokenExpiresAt;
     public User? CurrentUser => _currentUser;
     public List<string> CurrentUserRoles => _currentUserRoles;
 
@@ -34,6 +38,8 @@ public class ApiAuthenticationService : IAuthenticationService
             var token = await response.Content.ReadFromJsonAsync<TokenResponse>();
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token!.Token);
+            // Save the expiry time from the API response so we can check it later
+            _tokenExpiresAt = token.ExpiresAt.ToUniversalTime();
 
             var meResponse = await _httpClient.GetAsync("users/me");
             var profile = await meResponse.Content.ReadFromJsonAsync<UserProfileResponse>();
@@ -79,6 +85,7 @@ public class ApiAuthenticationService : IAuthenticationService
     {
         _currentUser = null;
         _currentUserRoles.Clear();
+        _tokenExpiresAt = DateTime.MinValue; // reset expiry so IsTokenExpired returns false after logout
         _httpClient.DefaultRequestHeaders.Authorization = null;
         AuthenticationStateChanged?.Invoke(this, false);
         return Task.CompletedTask;

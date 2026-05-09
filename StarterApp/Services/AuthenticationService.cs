@@ -19,6 +19,8 @@ public class LocalAuthenticationService : IAuthenticationService
     }
 
     public bool IsAuthenticated => _currentUser != null;
+    // Local (database) auth never expires — only the API version uses JWT tokens
+    public bool IsTokenExpired => false;
 
     public User? CurrentUser => _currentUser;
 
