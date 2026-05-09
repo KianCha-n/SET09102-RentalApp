@@ -11,8 +11,10 @@ public partial class RentalListViewModel : BaseViewModel
 {
     private readonly IRentalRepository _rentalRepository;
     private readonly INavigationService _navigationService;
+    // Added so we can check whether the user's session has expired before loading data
+    private readonly IAuthenticationService _authService;
 
-    // Items being rented out by the current user 
+    // Items being rented out by the current user
     [ObservableProperty]
     private ObservableCollection<Rental> incomingRentals = new();
 
@@ -28,16 +30,25 @@ public partial class RentalListViewModel : BaseViewModel
     [ObservableProperty]
     private bool showIncoming = true;
 
-    public RentalListViewModel(IRentalRepository rentalRepository, INavigationService navigationService)
+    public RentalListViewModel(IRentalRepository rentalRepository, INavigationService navigationService, IAuthenticationService authService)
     {
         _rentalRepository = rentalRepository;
         _navigationService = navigationService;
+        _authService = authService;
         Title = "My Rentals";
     }
 
     [RelayCommand]
     private async Task LoadRentalsAsync()
     {
+        // If the API token has expired, clear the session and send the user back to login
+        if (_authService.IsTokenExpired)
+        {
+            await _authService.LogoutAsync();
+            await _navigationService.NavigateToAsync("//LoginPage");
+            return;
+        }
+
         try
         {
             IsBusy = true;

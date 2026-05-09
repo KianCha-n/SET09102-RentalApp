@@ -42,6 +42,13 @@ public partial class ItemDetailViewModel : BaseViewModel
     private async Task LoadItemAsync()
     {
         if (ItemId <= 0) return;
+        // If the API token has expired, clear the session and send the user back to login
+        if (_authService.IsTokenExpired)
+        {
+            await _authService.LogoutAsync();
+            await _navigationService.NavigateToAsync("//LoginPage");
+            return;
+        }
         try
         {
             IsBusy = true;

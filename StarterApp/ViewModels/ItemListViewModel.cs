@@ -11,6 +11,8 @@ public partial class ItemListViewModel : BaseViewModel
 {
     private readonly IItemRepository _itemRepository;
     private readonly INavigationService _navigationService;
+    // Added so we can check whether the user's session has expired before loading data
+    private readonly IAuthenticationService _authService;
 
     [ObservableProperty]
     private ObservableCollection<Item> items = new();
@@ -18,16 +20,25 @@ public partial class ItemListViewModel : BaseViewModel
     [ObservableProperty]
     private bool isRefreshing;
 
-    public ItemListViewModel(IItemRepository itemRepository, INavigationService navigationService)
+    public ItemListViewModel(IItemRepository itemRepository, INavigationService navigationService, IAuthenticationService authService)
     {
         _itemRepository = itemRepository;
         _navigationService = navigationService;
+        _authService = authService;
         Title = "Browse Items";
     }
 
     [RelayCommand]
     private async Task LoadItemsAsync()
     {
+        // If the API token has expired, clear the session and send the user back to login
+        if (_authService.IsTokenExpired)
+        {
+            await _authService.LogoutAsync();
+            await _navigationService.NavigateToAsync("//LoginPage");
+            return;
+        }
+
         try
         {
             IsBusy = true;

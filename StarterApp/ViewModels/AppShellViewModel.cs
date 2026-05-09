@@ -74,26 +74,8 @@ namespace StarterApp.ViewModels
         private void OnAuthenticationStateChanged(object? sender, bool isAuthenticated)
         {
             LogoutCommand.NotifyCanExecuteChanged();
-            NavigateToProfileCommand.NotifyCanExecuteChanged();
-            NavigateToSettingsCommand.NotifyCanExecuteChanged();
             Debug.WriteLine($"Authentication state changed: {isAuthenticated}");
             Debug.WriteLine($"Current user is admin: {_authService.HasRole("Admin")}");
-        }
-
-        /// @brief Navigates to the current user's profile page
-        /// @return A task representing the asynchronous navigation operation
-        [RelayCommand]
-        private async Task NavigateToProfileAsync()
-        {
-            await _navigationService.NavigateToAsync("TempPage");
-        }
-
-        /// @brief Navigates to the current user's settings page
-        /// @return A task representing the asynchronous navigation operation
-        [RelayCommand]
-        private async Task NavigateToSettingsAsync()
-        {
-            await _navigationService.NavigateToAsync("TempPage");
         }
 
         /// @brief Logs out the current user and navigates to login page
@@ -103,11 +85,9 @@ namespace StarterApp.ViewModels
         private async Task LogoutAsync()
         {
             await _authService.LogoutAsync();
-            await _navigationService.NavigateToAsync("LoginPage");
+            await _navigationService.NavigateToAsync("//LoginPage");
 
             LogoutCommand.NotifyCanExecuteChanged();
-            NavigateToProfileCommand.NotifyCanExecuteChanged();
-            NavigateToSettingsCommand.NotifyCanExecuteChanged();
         }
     }
 }
