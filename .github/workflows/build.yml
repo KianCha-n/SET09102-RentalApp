@@ -1,0 +1,51 @@
+name: Build and Test
+
+# Runs automatically on every push or pull request to main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Job 1: Build the Android MAUI app to confirm it compiles successfully
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # Install the Android MAUI workload so the Android target framework is available
+      - name: Install MAUI Android workload
+        run: dotnet workload install maui-android
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Build only the Android target — confirms the app compiles with no errors
+      - name: Build MAUI app
+        run: dotnet build StarterApp/StarterApp.csproj --configuration Release -f net10.0-android --no-restore
+
+  # Job 2: Run all unit tests in the StarterApp.Tests project
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # The test project targets plain net10.0 so no MAUI workload is needed here
+      - name: Restore test dependencies
+        run: dotnet restore StarterApp.Tests/StarterApp.Tests.csproj
+
+      - name: Run unit tests
+        run: dotnet test StarterApp.Tests/StarterApp.Tests.csproj --configuration Release --verbosity normal
