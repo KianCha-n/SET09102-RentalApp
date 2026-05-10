@@ -39,10 +39,11 @@ public partial class MainViewModel : BaseViewModel
     /// @brief Default constructor for design-time support
     /// @details Sets the title to "Dashboard"
     public MainViewModel()
-        {
-            // Default constructor for design time support
-            Title = "Dashboard";
-        }
+    {
+        _authService = null!;
+        _navigationService = null!;
+        Title = "Dashboard";
+    }
     
     /// @brief Initializes a new instance of the MainViewModel class
     /// @param authService The authentication service instance
@@ -76,37 +77,18 @@ public partial class MainViewModel : BaseViewModel
     [RelayCommand]
     private async Task LogoutAsync()
     {
-        var result = await Application.Current.MainPage.DisplayAlert(
-            "Logout", 
-            "Are you sure you want to logout?", 
-            "Yes", 
+        var result = await Application.Current!.Windows[0].Page!.DisplayAlertAsync(
+            "Logout",
+            "Are you sure you want to logout?",
+            "Yes",
             "No");
 
         if (result)
         {
             await _authService.LogoutAsync();
-            await _navigationService.NavigateToAsync("LoginPage");
+            await _navigationService.NavigateToAsync("//LoginPage");
         }
     }
-
-    /// @brief Navigates to the user profile page
-    /// @details Relay command that navigates to the profile management page
-    /// @return A task representing the asynchronous navigation operation
-    [RelayCommand]
-    private async Task NavigateToProfileAsync()
-    {
-        await _navigationService.NavigateToAsync("TempPage");
-    }
-
-    /// @brief Navigates to the settings page
-    /// @details Relay command that navigates to the application settings page
-    /// @return A task representing the asynchronous navigation operation
-    [RelayCommand]
-    private async Task NavigateToSettingsAsync()
-    {
-        await _navigationService.NavigateToAsync("TempPage");
-    }
-
 
     /// @brief Navigates to the item list page
     [RelayCommand]
@@ -130,7 +112,7 @@ public partial class MainViewModel : BaseViewModel
     {
         if (!IsAdmin)
         {
-            await Application.Current.MainPage.DisplayAlert("Access Denied", "You don't have permission to access admin features.", "OK");
+            await Application.Current!.Windows[0].Page!.DisplayAlertAsync("Access Denied", "You don't have permission to access admin features.", "OK");
             return;
         }
         

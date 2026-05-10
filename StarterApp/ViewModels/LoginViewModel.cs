@@ -45,7 +45,8 @@ public partial class LoginViewModel : BaseViewModel
     /// @details Sets the title to "Login"
     public LoginViewModel()
     {
-        // Default constructor for design time support
+        _authService = null!;
+        _navigationService = null!;
         Title = "Login";
     }
 
@@ -118,6 +119,6 @@ public partial class LoginViewModel : BaseViewModel
     private async Task ForgotPasswordAsync()
     {
         // TODO: Implement forgot password functionality
-        await Application.Current.MainPage.DisplayAlert("Info", "Forgot password functionality not implemented yet", "OK");
+        await Application.Current!.Windows[0].Page!.DisplayAlertAsync("Info", "Forgot password functionality not implemented yet", "OK");
     }
 }

@@ -30,6 +30,8 @@ namespace StarterApp.ViewModels
         /// @details Sets the title to "StarterApp"
         public AppShellViewModel()
         {
+            _authService = null!;
+            _navigationService = null!;
             Title = "StarterApp";
         }
 
