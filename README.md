@@ -1,91 +1,46 @@
+#Rental App (SET09102 Coursework)
+
+A .NET MAUI Android application implementing a "Library of Things" peer-to-peer rental marketplace.
+Built on top of the SET09102 StarterApp template, this project demonstrates clean architecture,
+MVVM, the Repository pattern, automated testing and CI/CD.
+
+**Module:** SET09102 Software Engineering — Edinburgh Napier University
+
+
 ---
-title: "StarterApp readme"
-parent: StarterApp
-grand_parent: C# practice
-nav_order: 5
-mermaid: true
----
 
-# StarterApp
+## Features
 
-The purpose of this app is to act as a starting point for further development. It provides some
-basic features including:
+- **JWT authentication** against the shared coursework API (`/auth/token`, `/auth/register`)
+- **Item browsing** — list all items, view item details, owner-only edit
+- **Add / edit item** with input validation (title length, daily-rate range, category required)
+- **Rental requests** — request, approve / reject, returned / completed flow
+- **Incoming vs Outgoing rentals** — two-tab list for items lent out vs items borrowed
+- **Token-expiry handling** — expired sessions are forced to re-authenticate before any API call
+- **Role-aware UI** — admin-only routes are gated by `IAuthenticationService.HasRole`
 
-* Database integration and migrations
-* Role-based security
-* Local authentication
-* Example navigation
-
-This version of the app uses PostgreSQL for data storage and Entity Framework Core for object-relational mapping
-and migrations.
-
-To fully understand how it works, you should follow an appropriate set of tutorials such as 
-[this one](https://edinburgh-napier.github.io/SET09102/tutorials/csharp/) which covers all of the main
-concepts and techniques used here. However, if you want to jump straight in and work out any problems
-as you go along, that will also work. The code uses structured comments for use with the 
-[Doxygen](https://www.doxygen.nl/) documentation generator tool. 
-
-You can use any development environment with this project including
-
-* [Rider](https://www.jetbrains.com/rider/)
-* [Visual Studio](https://visualstudio.microsoft.com/)
-* [Visual Studio Code](https://code.visualstudio.com/)
-
-The instructions assume you will be using VSCode since that is a lowest-common-denominator choice.
-
-## Compatibility
-
-This app is built using the following tool versions.
-
-| Name                                                                                      | Version     |
-|-------------------------------------------------------------------------------------------|-------------|
-| [.NET](https://dotnet.microsoft.com/en-us/)                                               | 8.0 / 9.0   |
-| [PostgreSQL Docker image](https://hub.docker.com/_/postgres)                              | 16          |
-
-
-## Getting started
 
 ### Prerequisites
 
-Before using this app, ensure you have:
+- .NET 10 SDK
+- MAUI workload: `dotnet workload install maui-android`
+- Android emulator (or physical device with USB debugging) — recommended API 34
+- `adb` on your `PATH`
 
-1. **.NET SDK 8.0** or later installed
-2. **Docker** installed and running
-3. **PostgreSQL container** running (see [dev-environment tutorial](https://edinburgh-napier.github.io/SET09102/tutorials/csharp/dev-environment/))
+### Build & Run on Android
 
-### Configuration
+```bash
+dotnet build StarterApp/StarterApp.csproj -f net10.0-android -c Debug
+adb install -r StarterApp/bin/Debug/net10.0-android/com.companyname.starterapp-Signed.apk
+```
 
-1. Copy `StarterApp.Database/appsettings.json.template` to `StarterApp.Database/appsettings.json`
-2. Update the connection string with your PostgreSQL credentials:
-   ```json
-   {
-     "ConnectionStrings": {
-       "DevelopmentConnection": "Host=localhost;Username=student_user;Password=password123;Database=starterapp"
-     }
-   }
-   ```
+Then launch **StarterApp** from the emulator/device app drawer. Register a new account or log in
+with existing credentials — the app talks to the live API, so any account created persists.
 
-### Initial Setup
+### Running the Tests
 
-1. Navigate to the Migrations project and create the initial migration:
-   ```bash
-   cd StarterApp.Migrations
-   dotnet ef migrations add InitialCreate
-   ```
+```bash
+dotnet test StarterApp.Tests/StarterApp.Tests.csproj
+```
 
-2. Apply the migration to create the database:
-   ```bash
-   dotnet ef database update
-   ```
 
-3. Build and run the application:
-   ```bash
-   cd ../StarterApp
-   dotnet build
-   dotnet run
-   ```
-
-### Tutorial
-
-For a comprehensive guide on using this app and understanding its architecture, see the
-[MAUI + MVVM + Database Tutorial](https://edinburgh-napier.github.io/SET09102/tutorials/csharp/maui-mvvm-database/).
