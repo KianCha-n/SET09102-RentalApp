@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NSubstitute" Version="5.3.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../StarterApp.Database/StarterApp.Database.csproj" />
+  </ItemGroup>
+
+  <!-- Link source files from the main project (no MAUI dependencies) -->
+  <ItemGroup>
+    <Compile Include="../StarterApp/Models/Item.cs" />
+    <Compile Include="../StarterApp/Models/Rental.cs" />
+    <Compile Include="../StarterApp/Models/Category.cs" />
+    <Compile Include="../StarterApp/Models/RentalRequest.cs" />
+    <Compile Include="../StarterApp/Models/Review.cs" />
+    <Compile Include="../StarterApp/Models/ReviewRequest.cs" />
+    <Compile Include="../StarterApp/Services/INavigationService.cs" />
+    <Compile Include="../StarterApp/Repositories/IRepository.cs" />
+    <Compile Include="../StarterApp/Repositories/IItemRepository.cs" />
+    <Compile Include="../StarterApp/Repositories/IRentalRepository.cs" />
+    <Compile Include="../StarterApp/Repositories/IReviewRepository.cs" />
+    <Compile Include="../StarterApp/ViewModels/BaseViewModel.cs" />
+    <Compile Include="../StarterApp/ViewModels/AddEditItemViewModel.cs" />
+    <Compile Include="../StarterApp/ViewModels/ItemListViewModel.cs" />
+    <Compile Include="../StarterApp/ViewModels/ItemDetailViewModel.cs" />
+    <Compile Include="../StarterApp/ViewModels/RentalListViewModel.cs" />
+  </ItemGroup>
+
+</Project>
